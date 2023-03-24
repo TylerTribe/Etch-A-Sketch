@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>16x16 Grid of Divs</title>
+    <style>
+		/* Set the dimensions of each div relative to viewport */
+		.square {
+			width: calc(90vw / 16);
+			height: calc(90vw / 16);
+			border: 1px solid black;
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+		}
+		/* Make sure the container has no margin or padding */
+		body {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		// Create the grid
+		for (let i = 0; i < 16; i++) {
+			for (let j = 0; j < 16; j++) {
+				// Create a new div element
+				const div = document.createElement("div");
+				div.classList.add("square");
+				// Add the div to the body of the page
+				document.body.appendChild(div);
+			}
+			// Add a line break after each row of divs
+			document.body.appendChild(document.createElement("br"));
+		}
+	</script>
+</body>
+</html>
