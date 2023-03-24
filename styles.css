@@ -1,0 +1,18 @@
+.square {
+	width: calc(90vw / 16);
+	height: calc(90vw / 16);
+	border: 1px solid black;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	background-color: white;
+	transition: background-color 0.2s;
+}
+.square:hover {
+	background-color: lightblue;
+	cursor: pointer;
+}
+body {
+	margin: 0;
+	padding: 0;
+}
