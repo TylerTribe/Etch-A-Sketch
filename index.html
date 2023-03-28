@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>16x16 Grid of Divs</title>
-	<link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
 </head>
+<link rel="stylesheet" href="styles.css">
 <body>
-	<div id="container"></div>
-	<script src="scripts.js"></script>
-</body>
+    <div class="canvasWrap">
+        <canvas width="1800" height="1200" id="etch-a-sketch"></canvas>
+        <div class="buttons">
+          <button id="shake">Shake!</button>
+          <div class="slidecontainer">
+            <input type="range" min="8" max="64" value="32" class="slider" id="myRange">
+            <button id="color-button">Colors</button>
+          </div>
+        </div>
+      </div>
+    <script src="scripts.js"></script>
+
+  </body>
 </html>
