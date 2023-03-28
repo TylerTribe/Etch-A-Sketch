@@ -9,6 +9,8 @@ const canvas = document.getElementById("etch-a-sketch");
 const ctx = canvas.getContext("2d");
 const slider = document.getElementById("myRange");
 let squaresPerSide = 16;
+let squares = []; // array to hold information about each square in the grid
+let isMouseDown = false;
 
 slider.addEventListener("input", () => {
   switch (slider.value) {
@@ -21,9 +23,6 @@ slider.addEventListener("input", () => {
     case "32":
       squaresPerSide = 32;
       break;
-    case "48":
-      squaresPerSide = 48;
-      break;
     case "64":
       squaresPerSide = 64;
       break;
@@ -32,39 +31,75 @@ slider.addEventListener("input", () => {
 });
 
 function drawGrid() {
-  const squareSize = canvas.width / squaresPerSide;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < squaresPerSide; i++) {
-    for (let j = 0; j < squaresPerSide; j++) {
-      ctx.strokeRect(i * squareSize, j * squareSize, squareSize, squareSize);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    squares = []; // clear the squares array
+    const squareSize = Math.floor(canvas.width / squaresPerSide);
+    for (let i = 0; i < squaresPerSide; i++) {
+      for (let j = 0; j < squaresPerSide; j++) {
+        const square = {
+          x: i * squareSize,
+          y: j * squareSize,
+          size: squareSize,
+          color: "white"
+        };
+        squares.push(square); // add the square object to the squares array
+        ctx.strokeRect(square.x, square.y, square.size, square.size);
+      }
     }
   }
-}
 
+// Add event listeners to change color on click and hold
+canvas.addEventListener("mousedown", function(e) {
+  isMouseDown = true;
+  const mousePos = getMousePos(canvas, e);
+  const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+  if (clickedSquare) {
+    clickedSquare.color = "grey";
+    drawSquare(clickedSquare);
+  }
+});
+canvas.addEventListener("mouseup", function(e) {
+  isMouseDown = false;
+});
+canvas.addEventListener("mousemove", function(e) {
+  if (isMouseDown) {
+    const mousePos = getMousePos(canvas, e);
+    const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+    if (clickedSquare) {
+      clickedSquare.color = "grey";
+      drawSquare(clickedSquare);
+    }
+  }
+});
 
+// Helper function to get the mouse position relative to the canvas
+function getMousePos(canvas, e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
 
-canvas.width = 1000;
-canvas.height = 625;
-
-drawGrid();
-
-      // Add event listeners to change color on click and hold
-      canvas.addEventListener("mousedown", function(e) {
-        e.target.style.backgroundColor = "grey";
-        isMouseDown = true;
-      });
-      canvas.addEventListener("mouseup", function(e) {
-        e.target.style.backgroundColor = "white";
-        isMouseDown = false;
-      });
-      canvas.addEventListener("mousemove", function(e) {
-        // Check if mouse is down
-        if (isMouseDown) {
-          e.target.style.backgroundColor = "grey";
+// Helper function to get the square object that was clicked on
+function getClickedSquare(x, y) {
+    for (let i = 0; i < squares.length; i++) {
+      const square = squares[i];
+      if (x >= square.x && x <= square.x + square.size &&
+          y >= square.y && y <= square.y + square.size) {
+        return square;
+      }
+    }
+    return null;
+  }
+        
+        // Helper function to draw a square with a specified color
+        function drawSquare(square) {
+        ctx.fillStyle = square.color;
+        ctx.fillRect(square.x, square.y, square.size, square.size);
         }
-      });
-
-      // Add the div to the grid container
-      gridContainer.appendChild();
-
+        
+        drawGrid();
 
