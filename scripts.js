@@ -23,6 +23,7 @@ slider.addEventListener("input", () => {
     case "32":
       squaresPerSide = 32;
       break;
+
     case "64":
       squaresPerSide = 64;
       break;
@@ -34,16 +35,17 @@ function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     squares = []; // clear the squares array
     const squareSize = Math.floor(canvas.width / squaresPerSide);
-    for (let i = 0; i < squaresPerSide; i++) {
-      for (let j = 0; j < squaresPerSide; j++) {
+    for (let column = 0; column < squaresPerSide; column++) {
+      for (let row = 0; row < squaresPerSide; row++) {
         const square = {
-          x: i * squareSize,
-          y: j * squareSize,
+          x: column * squareSize,
+          y: row * squareSize,
           size: squareSize,
           color: "white"
         };
         squares.push(square); // add the square object to the squares array
-        ctx.strokeRect(square.x, square.y, square.size, square.size);
+        ctx.fillStyle = square.color;
+        ctx.fillRect(square.x, square.y, square.size, square.size);
       }
     }
   }
@@ -102,4 +104,57 @@ function getClickedSquare(x, y) {
         }
         
         drawGrid();
+
+        function shake() {
+            for (let i = 0; i < squares.length; i++) {
+              squares[i].color = "white";
+              drawSquare(squares[i]);
+            }
+          }
+          
+          const clearButton = document.getElementById("shake");
+          clearButton.addEventListener("click", shake);
+
+
+          /* OK SO EVERYTHING UNDERNEATH HERE IS SUS. NEEDS FIXING
+          
+          let colorOptions = ['black', 'random'];
+          let currentColorIndex = 0;
+          let currentBlackness = 0;
+          
+          function colorOption() {
+            currentColorIndex++;
+            if (currentColorIndex >= colorOptions.length) {
+              currentColorIndex = 0;
+              currentBlackness = 0;
+            }
+          
+            if (colorOptions[currentColorIndex] === 'random') {
+              currentBlackness = 0;
+            }
+          
+            colorButton.textContent = colorOptions[currentColorIndex];
+          }
+          
+          function getNewColor() {
+            if (colorOptions[currentColorIndex] === 'random') {
+              return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+            } else {
+              currentBlackness += 20;
+              if (currentBlackness > 100) {
+                currentBlackness = 100;
+              }
+              return `hsl(0, 0%, ${100 - currentBlackness}%)`;
+            }
+          }
+          let colorButton = document.querySelector('#color-button');
+          colorButton.addEventListener('click', colorOption);
+          
+          function draw(e) {
+            // ...
+            ctx.fillStyle = getNewColor();
+            // ...
+          }
+
+          */
 
