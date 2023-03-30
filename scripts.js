@@ -5,12 +5,85 @@
 // clear or shake function
 // listen for mousedown
 
+
 const canvas = document.getElementById("etch-a-sketch");
 const ctx = canvas.getContext("2d");
 const slider = document.getElementById("myRange");
 let squaresPerSide = 16;
 let squares = []; // array to hold information about each square in the grid
 let isMouseDown = false;
+
+canvas.addEventListener("mousemove", function(e) {
+    if (isMouseDown) {
+      const mousePos = getMousePos(canvas, e);
+      const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+      if (clickedSquare) {
+        if (colorChoice === "random") {
+          // Generate a random color using RGB values between 0 and 255
+          const red = Math.floor(Math.random() * 256); 
+          const green = Math.floor(Math.random() * 256);
+          const blue = Math.floor(Math.random() * 256);
+          clickedSquare.color = `rgb(${red}, ${green}, ${blue})`;
+        } else {
+          clickedSquare.color = colorChoice;
+        }
+        drawSquare(clickedSquare);
+      }
+    }
+  });
+
+  // Set initial light grey color
+let currentGrey = 34;
+
+canvas.addEventListener("mousemove", function(e) {
+  if (isMouseDown) {
+    const mousePos = getMousePos(canvas, e);
+    const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+    if (clickedSquare) {
+      if (colorChoice === "Grey") {
+        // Check if the square is already grey
+        if (clickedSquare.color === "#222222") {
+          // Darken the grey color by 20%
+          currentGrey += 34;
+          clickedSquare.color = `#${currentGrey.toString(16).padStart(2, '0').repeat(3)}`;
+          if (currentGrey === 0) {
+            // Reset the color to black if it has darkened to black
+            clickedSquare.color = "#000000";
+          }
+        } else {
+          // Reset the grey color if a different color is selected
+          currentGrey = 34;
+          clickedSquare.color = "#222222";
+        }
+      } else {
+        clickedSquare.color = colorChoice;
+      }
+      drawSquare(clickedSquare);
+    }
+  }
+});
+
+
+
+  canvas.addEventListener("mousemove", function(e) {
+    if (isMouseDown) {
+      const mousePos = getMousePos(canvas, e);
+      const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+      if (clickedSquare) {
+        if (colorChoice === "grey") {
+          // Generate a random color using RGB values between 0 and 255
+          const red = Math.floor(Math.random() * 256);
+          const green = Math.floor(Math.random() * 256);
+          const blue = Math.floor(Math.random() * 256);
+          clickedSquare.color = `rgb(${red}, ${green}, ${blue})`;
+        } else {
+          clickedSquare.color = colorChoice;
+        }
+        drawSquare(clickedSquare);
+      }
+    }
+  });
+
 
 slider.addEventListener("input", () => {
   switch (slider.value) {
@@ -50,29 +123,32 @@ function drawGrid() {
     }
   }
 
-// Add event listeners to change color on click and hold
-canvas.addEventListener("mousedown", function(e) {
-  isMouseDown = true;
-  const mousePos = getMousePos(canvas, e);
-  const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
-  if (clickedSquare) {
-    clickedSquare.color = "grey";
-    drawSquare(clickedSquare);
-  }
-});
-canvas.addEventListener("mouseup", function(e) {
-  isMouseDown = false;
-});
-canvas.addEventListener("mousemove", function(e) {
-  if (isMouseDown) {
+  let colorChoice = 'black'; // default to black
+
+  canvas.addEventListener("mousedown", function(e) {
+    isMouseDown = true;
     const mousePos = getMousePos(canvas, e);
     const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
     if (clickedSquare) {
-      clickedSquare.color = "grey";
+      clickedSquare.color = colorChoice;
       drawSquare(clickedSquare);
     }
-  }
-});
+  });
+  
+  canvas.addEventListener("mouseup", function(e) {
+    isMouseDown = false;
+  });
+  
+  canvas.addEventListener("mousemove", function(e) {
+    if (isMouseDown) {
+      const mousePos = getMousePos(canvas, e);
+      const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+      if (clickedSquare) {
+        clickedSquare.color = colorChoice;
+        drawSquare(clickedSquare);
+      }
+    }
+  });
 
 // Helper function to get the mouse position relative to the canvas
 function getMousePos(canvas, e) {
@@ -115,46 +191,21 @@ function getClickedSquare(x, y) {
           const clearButton = document.getElementById("shake");
           clearButton.addEventListener("click", shake);
 
+          const colorButton = document.getElementById('color-button');
 
-          /* OK SO EVERYTHING UNDERNEATH HERE IS SUS. NEEDS FIXING
-          
-          let colorOptions = ['black', 'random'];
-          let currentColorIndex = 0;
-          let currentBlackness = 0;
-          
-          function colorOption() {
-            currentColorIndex++;
-            if (currentColorIndex >= colorOptions.length) {
-              currentColorIndex = 0;
-              currentBlackness = 0;
-            }
-          
-            if (colorOptions[currentColorIndex] === 'random') {
-              currentBlackness = 0;
-            }
-          
-            colorButton.textContent = colorOptions[currentColorIndex];
-          }
-          
-          function getNewColor() {
-            if (colorOptions[currentColorIndex] === 'random') {
-              return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-            } else {
-              currentBlackness += 20;
-              if (currentBlackness > 100) {
-                currentBlackness = 100;
-              }
-              return `hsl(0, 0%, ${100 - currentBlackness}%)`;
-            }
-          }
-          let colorButton = document.querySelector('#color-button');
-          colorButton.addEventListener('click', colorOption);
-          
-          function draw(e) {
-            // ...
-            ctx.fillStyle = getNewColor();
-            // ...
-          }
-
-          */
-
+colorButton.addEventListener('click', function() {
+  switch (colorChoice) {
+    case 'black':
+      colorChoice = 'grey';
+      colorButton.textContent = 'Grey';
+      break;
+    case 'grey':
+      colorChoice = 'random';
+      colorButton.textContent = 'Random';
+      break;
+    case 'random':
+      colorChoice = 'black';
+      colorButton.textContent = 'Black';
+      break;
+  }
+});
