@@ -12,78 +12,46 @@ const slider = document.getElementById("myRange");
 let squaresPerSide = 16;
 let squares = []; // array to hold information about each square in the grid
 let isMouseDown = false;
+const gradient = ["#FFFFFF", "#222222", "#444444", "#666666", "#888888", "#000000"];
+
+let colorChoice = 'black'; // default to black  
 
 canvas.addEventListener("mousemove", function(e) {
     if (isMouseDown) {
-      const mousePos = getMousePos(canvas, e);
-      const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
-      if (clickedSquare) {
-        if (colorChoice === "random") {
-          // Generate a random color using RGB values between 0 and 255
-          const red = Math.floor(Math.random() * 256); 
-          const green = Math.floor(Math.random() * 256);
-          const blue = Math.floor(Math.random() * 256);
-          clickedSquare.color = `rgb(${red}, ${green}, ${blue})`;
-        } else {
-          clickedSquare.color = colorChoice;
+        const mousePos = getMousePos(canvas, e);
+        const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
+        if (clickedSquare) {
+            if (colorChoice === "random") {
+                // Generate a random color using RGB values between 0 and 255
+                const red = Math.floor(Math.random() * 256); 
+                const green = Math.floor(Math.random() * 256);
+                const blue = Math.floor(Math.random() * 256);
+                clickedSquare.color = `rgb(${red}, ${green}, ${blue})`;
+            } else if (colorChoice === "grey") {
+                let index = gradient.indexOf(clickedSquare.color);
+                // If the current color is white, set the index to 1 (the second color in the array)
+                if (index === 0) {
+                    index = 1;
+                } else {
+                    index--;
+                }
+                // If the index is less than or equal to 0, reset it to the last color in the gradient array
+                if (index <= 0) {
+                    index = gradient.length - 1;
+                }
+                // Set the square's color to the new color in the gradient array
+                clickedSquare.color = gradient[index];
+                console.log(index, clickedSquare.color);
+            } else {
+                clickedSquare.color = colorChoice;
+            }
+            drawSquare(clickedSquare);
         }
-        drawSquare(clickedSquare);
-      }
     }
-  });
-
-  // Set initial light grey color
-let currentGrey = 34;
-
-canvas.addEventListener("mousemove", function(e) {
-  if (isMouseDown) {
-    const mousePos = getMousePos(canvas, e);
-    const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
-    if (clickedSquare) {
-      if (colorChoice === "Grey") {
-        // Check if the square is already grey
-        if (clickedSquare.color === "#222222") {
-          // Darken the grey color by 20%
-          currentGrey += 34;
-          clickedSquare.color = `#${currentGrey.toString(16).padStart(2, '0').repeat(3)}`;
-          if (currentGrey === 0) {
-            // Reset the color to black if it has darkened to black
-            clickedSquare.color = "#000000";
-          }
-        } else {
-          // Reset the grey color if a different color is selected
-          currentGrey = 34;
-          clickedSquare.color = "#222222";
-        }
-      } else {
-        clickedSquare.color = colorChoice;
-      }
-      drawSquare(clickedSquare);
-    }
-  }
 });
 
 
-
-  canvas.addEventListener("mousemove", function(e) {
-    if (isMouseDown) {
-      const mousePos = getMousePos(canvas, e);
-      const clickedSquare = getClickedSquare(mousePos.x, mousePos.y);
-      if (clickedSquare) {
-        if (colorChoice === "grey") {
-          // Generate a random color using RGB values between 0 and 255
-          const red = Math.floor(Math.random() * 256);
-          const green = Math.floor(Math.random() * 256);
-          const blue = Math.floor(Math.random() * 256);
-          clickedSquare.color = `rgb(${red}, ${green}, ${blue})`;
-        } else {
-          clickedSquare.color = colorChoice;
-        }
-        drawSquare(clickedSquare);
-      }
-    }
-  });
-
+  
 
 slider.addEventListener("input", () => {
   switch (slider.value) {
@@ -122,8 +90,6 @@ function drawGrid() {
       }
     }
   }
-
-  let colorChoice = 'black'; // default to black
 
   canvas.addEventListener("mousedown", function(e) {
     isMouseDown = true;
