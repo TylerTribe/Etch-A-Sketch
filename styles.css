@@ -1,18 +1,77 @@
-.square {
-	width: calc(90vw / 16);
-	height: calc(90vw / 16);
-	border: 1px solid black;
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	background-color: white;
-	transition: background-color 0.2s;
-}
-.square:hover {
-	background-color: lightblue;
-	cursor: pointer;
-}
 body {
-	margin: 0;
-	padding: 0;
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  background: #363333;
+  background-size: cover;
+}
+canvas {
+  border: 30px solid #e80000;
+  border-radius: 8px;
+  /* Set the width and height to half the actual size so it doesn't look pixelated */
+  width: 1000px;
+  height: 625px;
+  background: white;
+  margin-top: 2px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+#shake {
+  background-color: whitesmoke;
+  padding: 20px;
+  border-radius: 50%;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  cursor: pointer;
+  border-color: whitesmoke;
+  animation: shake 1.5s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+}
+
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0) rotate3d(0, 0, 1, -2deg);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0) rotate3d(0, 0, 1, -2deg);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+}
+.slider {
+  -webkit-appearance: none;
+  width: 800px;
+  height: 15px;
+  border-radius: 10px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+#color-button {
+  background-color: whitesmoke;
+  padding: 20px;
+  border-radius: 50%;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 22px;
+  cursor: pointer;
+  border-color: whitesmoke;
 }
