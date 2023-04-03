@@ -13,6 +13,7 @@ canvas {
   width: 1000px;
   height: 625px;
   background: white;
+  margin-top: 2px;
 }
 .buttons {
   display: flex;
@@ -32,6 +33,7 @@ canvas {
   transform: translate3d(0, 0, 0);
   perspective: 1000px;
 }
+
 
 @keyframes shake {
   10%, 90% {
@@ -69,7 +71,7 @@ canvas {
   border-radius: 50%;
   text-decoration: none;
   display: inline-block;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   border-color: whitesmoke;
 }

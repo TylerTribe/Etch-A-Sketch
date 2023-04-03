@@ -8,8 +8,8 @@ const colorOptions = ['black', 'pencil', 'random'];
 let currentColorOptionsIndex = 1;
 let currentPencilIndex = 1;
 let colorChoice = 'black'; // default to black
-let gradient = ['#FFFFFF', '#222222', '#444444', '#666666', '#888888', '#000000'];
-
+let gradient = ['#FFFFFF', '#888888', '#666666', '#444444', '#222222', '#000000'];
+let lastColor = '#FFFFFF'; // initialize last color to white. If I remove this the pencil color option breaks for some reason.
 
 
 canvas.addEventListener("mousemove", function(e) {
@@ -26,8 +26,11 @@ canvas.addEventListener("mousemove", function(e) {
             } else if (colorChoice === 'pencil') {
                 // Set the square's color to the current color in the pencil array
                 clickedSquare.color = gradient[currentPencilIndex];
-                // Increment the current pencil index
-                currentPencilIndex = (currentPencilIndex + 1) % gradient.length;
+                // Increment the current pencil index, but only if the last color used wasn't black. This isn't really working and I'm not sure why.
+                if (lastColor !== '#000000') {
+                    currentPencilIndex = (currentPencilIndex + 1) % gradient.length;
+                }
+                lastColor = clickedSquare.color;
             } else {
                 clickedSquare.color = colorChoice;
             }
@@ -35,7 +38,7 @@ canvas.addEventListener("mousemove", function(e) {
         }
     }
 });
-
+// Changes the size of the etch-a-sketch canvas 
 slider.addEventListener("input", () => {
     switch (slider.value) {
         case "8":
@@ -87,7 +90,6 @@ canvas.addEventListener("mouseup", function(e) {
     isMouseDown = false;
 });
 
-// Helper function to get the mouse position relative
     function getMousePos(canvas, e) {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
@@ -98,7 +100,6 @@ canvas.addEventListener("mouseup", function(e) {
         };
     }
 
-    // Helper function to get the square object that was clicked on
     function getClickedSquare(x, y) {
         for (let i = 0; i < squares.length; i++) {
         const square = squares[i];
@@ -110,7 +111,6 @@ canvas.addEventListener("mouseup", function(e) {
         return null;
     }
             
-            // Helper function to draw a square with a specified color
             function drawSquare(square) {
             ctx.fillStyle = square.color;
             ctx.fillRect(square.x, square.y, square.size, square.size);
@@ -128,8 +128,6 @@ canvas.addEventListener("mouseup", function(e) {
             const clearButton = document.getElementById("shake");
             clearButton.addEventListener("click", shake);
             
-            
-
             const colorButton = document.getElementById('color-button');
 
     colorButton.addEventListener('click', function() {
